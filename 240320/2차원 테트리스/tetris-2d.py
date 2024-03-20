@@ -78,7 +78,7 @@ for i in range(k):
 
     elif t==2:
         move_t2(yellow_arr, x,y)
-        move_t3(red_arr, t, 4-x-1)
+        move_t3(red_arr, y, 4-x-1)
 
     else:
         move_t3(yellow_arr, x, y)
