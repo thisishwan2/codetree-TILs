@@ -33,6 +33,9 @@ def conflict_usr(arr, black_list, nx,ny, player_num, direction):
         black_list.append(arr[nx][ny][0])  # 블랙리스트 처리
         arr[nx][ny] = [player_num, k+1]  # 해당 위치를 더 작은 유저로 변경
         q.append([nx, ny, player_num, direction])
+    else:
+        black_list.append(player_num)  # 블랙리스트 처리
+
 
 
 from collections import deque
@@ -126,7 +129,7 @@ while ans < 1000:
                         break
 
                     # 내가 왔던 이전 칸이면
-                    elif arr[nx][ny][0] == player_num:
+                    elif arr[nx][ny][0] == player_num and arr[nx][ny][1]==k-1:
                         # 다시 돌아가기
                         q.append([nx, ny, player_num, j])
                         arr[nx][ny] = [player_num, k + 1]
