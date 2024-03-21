@@ -1,3 +1,18 @@
+def go_out(arr):
+    available = 0
+    for i in range(len(arr)):
+        for j in range(len(arr)):
+            if arr[i][j]!=0:
+                if arr[i][j][1]==k:
+                    available+=1
+
+    if available == 1:
+        return True
+    else:
+        return False
+
+
+
 def minus(arr):
     for i in range(len(arr)):
         for j in range(len(arr)):
@@ -13,15 +28,15 @@ def minus(arr):
 
 # 현재 위치에 인접한 칸에 빈칸이 있는 지 확인
 def check(arr, x, y):
-    avaliable = 0
+    available = 0
     for i in range(1, 5):
         nx = x + dx[i]
         ny = y + dy[i]
         if 0 <= nx < n and 0 <= ny < n:
             if arr[nx][ny]==0 or arr[nx][ny][1]==k+1: # 인전한 칸이 빈칸이거나 해당 턴에 누가 온 경우
-                avaliable += 1
+                available += 1
 
-    if avaliable > 0:
+    if available > 0:
         return True
     else:
         return False
@@ -83,7 +98,8 @@ while ans < 1000:
     # 이전의 땅들은 독점 계약 수를 -1해주고, 현재 위치는 k 로 넣어준다.
     # 만약 두명이 같은 땅을 접근하려고 한다? 그럼 숫자 작은 놈이 이기고, 숫자 큰 플레이어는 탈락
 
-    if len(q)==1:
+    # 탈출 조건 재정의
+    if go_out(arr):
         print(ans)
         exit()
 
