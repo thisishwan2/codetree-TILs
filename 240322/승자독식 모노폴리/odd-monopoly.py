@@ -74,7 +74,6 @@ while ans < 1000:
             dx, dy = dir.get(j)
             nx = x + dx
             ny = y + dy
-            not_empty_arr += 1
 
             if 0 <= nx < n and 0 <= ny < n:
                 # 인접한 빈칸 존재하는 경우
@@ -86,7 +85,8 @@ while ans < 1000:
                 elif arr[nx][ny][1] == k+1:
                     conflict(arr, nx, ny, k, player_num, j, black_list)
                     break
-
+                    
+                not_empty_arr += 1
         # 그 외의 경우 본인의 이전 칸으로 돌아간다.
         if not_empty_arr == 4:
             for i in range(1, 5):
