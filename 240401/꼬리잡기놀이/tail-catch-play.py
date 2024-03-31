@@ -5,7 +5,7 @@ dx = [-1, 1, 0, 0]
 dy = [0, 0, -1, 1]
 
 
-def turn(arr):
+def turn_90(arr):
     new_arr = [[0 for _ in range(n)] for _ in range(n)]
     for i in range(n):
         for j in range(n):
@@ -53,7 +53,10 @@ def throw(idx):
             arr[x_1][y_1]=3
             arr[x_3][y_3]=1
 
-            return cnt*cnt
+            return cnt_1*cnt_1
+
+    return 0
+
 
 def move(arr):
     team = []
@@ -137,24 +140,24 @@ for i in range(k):
     if n - 1 >= turn >= 0:  # 좌측
         score += throw(turn)
     elif 2 * n - 1 >= turn > n:  # 하단
-        arr = turn(arr)
+        arr = turn_90(arr)
         score += throw(turn % n)
-        arr = turn(arr)
-        arr = turn(arr)
-        arr = turn(arr)
+        arr = turn_90(arr)
+        arr = turn_90(arr)
+        arr = turn_90(arr)
 
     elif 3 * n - 1 >= turn > 2 * n:  # 우측
-        arr = turn(arr)
-        arr = turn(arr)
+        arr = turn_90(arr)
+        arr = turn_90(arr)
         score += throw(turn % n)
-        arr = turn(arr)
-        arr = turn(arr)
+        arr = turn_90(arr)
+        arr = turn_90(arr)
     elif 4 * n - 1 >= turn > 3 * n:  # 상단
-        arr = turn(arr)
-        arr = turn(arr)
-        arr = turn(arr)
+        arr = turn_90(arr)
+        arr = turn_90(arr)
+        arr = turn_90(arr)
         score += throw(turn % n)
-        arr = turn(arr)
+        arr = turn_90(arr)
 
 
 print(score)
