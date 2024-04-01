@@ -73,8 +73,8 @@ def move(arr):
             if arr[i][j]==3 and visited[i][j]==0:
                 arr = bfs_move(i,j,visited, arr)
 
-    print(*arr, sep='\n')
-    print("===========")
+    # print(*arr, sep='\n')
+    # print("===========")
     return arr
 
 
