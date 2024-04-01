@@ -1,6 +1,11 @@
 from collections import deque
 import copy
 
+# 3 1 5
+# 3 2 2
+# 4 0 2
+# 1 2 2
+
 dx = [-1, 1, 0, 0]
 dy = [0, 0, -1, 1]
 
@@ -68,8 +73,8 @@ def move(arr):
             if arr[i][j]==3 and visited[i][j]==0:
                 arr = bfs_move(i,j,visited, arr)
 
-    # print(*arr, sep='\n')
-    # print("===========")
+    print(*arr, sep='\n')
+    print("===========")
     return arr
 
 
@@ -134,20 +139,20 @@ for i in range(k):
 
     if n - 1 >= turn >= 0:  # 좌측
         score += throw(turn)
-    elif 2 * n - 1 >= turn > n:  # 하단
+    elif 2 * n - 1 >= turn >= n:  # 하단
         arr = turn_90(arr)
         score += throw(turn % n)
         arr = turn_90(arr)
         arr = turn_90(arr)
         arr = turn_90(arr)
 
-    elif 3 * n - 1 >= turn > 2 * n:  # 우측
+    elif 3 * n - 1 >= turn >= 2 * n:  # 우측
         arr = turn_90(arr)
         arr = turn_90(arr)
         score += throw(turn % n)
         arr = turn_90(arr)
         arr = turn_90(arr)
-    elif 4 * n - 1 >= turn > 3 * n:  # 상단
+    elif 4 * n - 1 >= turn >= 3 * n:  # 상단
         arr = turn_90(arr)
         arr = turn_90(arr)
         arr = turn_90(arr)
