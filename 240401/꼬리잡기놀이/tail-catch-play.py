@@ -27,12 +27,10 @@ def throw(idx):
             visited[idx][i] = 1
 
             dic = {}
-
             while q:
                 x, y, cnt = q.popleft()
 
                 if arr[x][y] == 1:
-
                    dic[1]=[x,y,cnt]
 
                 elif arr[x][y] == 3:
@@ -44,6 +42,10 @@ def throw(idx):
 
                     if 0 <= nx < n and 0 <= ny < n:
                         if visited[nx][ny] == 0 and arr[nx][ny] != 4 and arr[nx][ny] != 0:
+                            if (arr[x][y]==3 and arr[nx][ny]==1):
+                                continue
+                            if (arr[x][y]==1 and arr[nx][ny]==3):
+                                continue
                             q.append([nx, ny, cnt + 1])
                             visited[nx][ny] = 1
 
@@ -58,63 +60,56 @@ def throw(idx):
     return 0
 
 
+# 진짜 DFS 로 수정해야함
 def move(arr):
-    team = []
-    new_arr = copy.deepcopy(arr)
+    visited = [[0 for _ in range(n)] for _ in range(n)]
     for i in range(n):
         for j in range(n):
-            if arr[i][j] == 1:
-                team.append(dfs(arr, i, j, team))
+            if arr[i][j]==3 and visited[i][j]==0:
+                arr = bfs_move(i,j,visited, arr)
 
-    for i in team:
-        for idx, j in enumerate(i):
-            people = j[0]
-            x = j[1][0]
-            y = j[1][1]
-
-            if idx == len(i) - 1:
-                for k in range(4):
-                    nx = x + dx[k]
-                    ny = y + dy[k]
-                    if 0 <= nx < n and 0 <= ny < n:
-                        if new_arr[nx][ny] != 4 and new_arr[nx][ny] != 0:
-                            arr[nx][ny] = people
-                            arr[x][y] = 4
-            else:
-                for k in range(4):
-                    nx = x + dx[k]
-                    ny = y + dy[k]
-                    if 0 <= nx < n and 0 <= ny < n:
-                        if arr[nx][ny] == 4:
-                            arr[nx][ny] = people
-                            arr[x][y] = 4
+    # print(*arr, sep='\n')
+    # print("===========")
     return arr
 
 
-def dfs(arr, x, y, team):
-    tmp = []
-    tmp.append([1, [x, y]])
+def bfs_move(x,y,visited, arr):
+    new_arr = copy.deepcopy(arr)
 
-    visited = [[0 for _ in range(n)] for _ in range(n)]
-    visited[x][y] = 1
+    q=deque()
+    q.append((x,y))
 
-    q = deque()
-    q.append([x, y])
 
     while q:
-        x, y = q.popleft()
+        x,y = q.popleft()
 
         for i in range(4):
-            nx = x + dx[i]
-            ny = y + dy[i]
+            nx = x+dx[i]
+            ny = y+dy[i]
 
-            if 0 <= nx < n and 0 <= ny < n:
-                if visited[nx][ny] == 0 and arr[nx][ny] != 4 and arr[nx][ny] != 0:
-                    q.append([nx, ny])
-                    tmp.append([arr[nx][ny], [nx, ny]])
+            if 0 <= nx < n and 0 <= ny<n and visited[nx][ny]==0:
+                if arr[x][y] == 3 and arr[nx][ny] == 2: # 현재 꼬리고 다음은 2인경우
+                    q.append((nx,ny))
                     visited[nx][ny] = 1
+                    new_arr[nx][ny]=arr[x][y]
+                    new_arr[x][y]=4
+                    break
+                elif arr[x][y]==2 and arr[nx][ny]==2:
+                    q.append((nx, ny))
+                    visited[nx][ny] = 1
+                    new_arr[nx][ny] = arr[x][y]
+                    break
+                elif arr[x][y]==2 and arr[nx][ny]==1:
+                    q.append((nx, ny))
+                    visited[nx][ny] = 1
+                    new_arr[nx][ny] = arr[x][y]
+                    break
 
-    return tmp
+                elif (arr[x][y]==1 and arr[nx][ny]==4) or (arr[x][y]==1 and arr[nx][ny]==3):
+                    visited[nx][ny] = 1
+                    new_arr[nx][ny] = arr[x][y]
+                    break
+    return new_arr
 
 
 n, m, k = map(int, input().split())
