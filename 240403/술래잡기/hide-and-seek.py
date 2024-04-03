@@ -238,7 +238,7 @@ seeker_backward[n//2][n//2]=4
 # 이동할 순서 리스트 만들기
 seeker_move_seq = []
 tmp1 = [i for i in range(2, n*n+1)]
-tmp2 = [i for i in range(n*n-1,-1,-1)]
+tmp2 = [i for i in range(n*n-1,0,-1)]
 while 1:
     if len(seeker_move_seq)>=k:
         seeker_move_seq = seeker_move_seq[:k]
@@ -268,5 +268,4 @@ for i in range(1, len(seeker_move_seq)):
             elif seeker_move_seq[i-1] > seeker_move_seq[i]:
                 move_backward(seeker_move_seq[i])
     turn+=1
-
 print(total_score)
