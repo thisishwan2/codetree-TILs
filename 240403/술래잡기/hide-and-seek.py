@@ -1,6 +1,7 @@
 from collections import deque
 
 def move_runner():
+    global seeker_x, seeker_y
     move_list = []
     for i in runner_dic.keys():
         x, y = runner_dic[i][0], runner_dic[i][1]
@@ -11,20 +12,28 @@ def move_runner():
     for i in move_list:
         x, y, d = runner_dic[i]
 
-        for j in range(2):
+
+        nx = x + dir_dic[d][0]
+        ny = y + dir_dic[d][1]
+
+        # 격자 벗어나지 않는 경우
+        if 0 <= nx < n and 0 <= ny < n:
+            # 술래가 없으면
+            if (nx,ny)!=(seeker_x, seeker_y):
+                runner_dic[i] = [nx, ny, d]
+
+        # 격자를 벗어나는 경우
+        else:
+            d = d + 2
+            if d > 4:
+                d = d - 4
+
             nx = x + dir_dic[d][0]
             ny = y + dir_dic[d][1]
 
-            if 0 <= nx < n and 0 <= ny < n:
-                if arr[nx][ny] == 1:
-                    break
-                else:
-                    runner_dic[i] = [nx, ny, d]
-                    break
-            else:
-                d = d + 2
-                if d > 4:
-                    d = d - 4
+            if (nx,ny)!=(seeker_x, seeker_y): # 술래가 없으면
+                runner_dic[i] = [nx, ny, d]
+
 
 
 def move_forward(next):
