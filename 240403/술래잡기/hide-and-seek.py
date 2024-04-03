@@ -55,7 +55,7 @@ def move_forward(next):
         ny = check_y + direction[1]*i
 
         # 나무가 아님
-        if arr[nx][ny] == 0:
+        if 0<=nx<n and 0<=ny<n and arr[nx][ny] == 0:
             for j in runner_dic.keys():
                 r_x = runner_dic[j][0]
                 r_y = runner_dic[j][1]
@@ -94,7 +94,7 @@ def move_backward(next):
         ny = check_y + direction[1]*i
 
         # 나무가 아님
-        if arr[nx][ny] == 0:
+        if 0<=nx<n and 0<=ny<n and arr[nx][ny] == 0:
             for j in runner_dic.keys():
                 r_x = runner_dic[j][0]
                 r_y = runner_dic[j][1]
