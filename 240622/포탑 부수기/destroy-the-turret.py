@@ -38,6 +38,7 @@ def choose_target():
     for i in range(n):
         for j in range(m):
             if arr[i][j] == 0: continue
+            if (i,j) == (ax,ay): continue
             if arr[i][j] > damage:
                 damage = arr[i][j]
                 tx = i
@@ -110,7 +111,7 @@ def check_destory():
     for i in range(n):
         for j in range(m):
             if arr[i][j] < 0:
-                arr[i][j] == 0
+                arr[i][j] = 0
 
 
 def refactor_tower():
