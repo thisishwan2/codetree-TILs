@@ -1,6 +1,5 @@
 from collections import deque
 
-
 def choose_attacker():
     damage = 1e9
     ax = 0
@@ -115,12 +114,27 @@ def check_destory():
 
 
 def refactor_tower():
+    tower_cnt = 0
+    tower_list = []
     for i in range(n):
         for j in range(m):
-            if arr[i][j] !=0:
-                if attack[i][j] == False:
-                    arr[i][j] += 1
+            if arr[i][j] ==0: continue
+            tower_cnt+=1
+            if attack[i][j]: continue
+            tower_list.append((i,j))
 
+    # 타워가 하나만 남으면, 최대값을 출력하고 종료(이부분을 체크 안하면 하나만 남았지만, 계속 진행되어서 이상한 답이 나옴)
+    if tower_cnt == 1:
+        print(get_max())
+        exit(0)
+    for i,j in tower_list:
+        arr[i][j] += 1
+
+def get_max():
+    maxi = 0
+    for i in range(n):
+        maxi = max(maxi, max(arr[i]))
+    return maxi
 
 n, m, k = map(int, input().split())
 
@@ -162,7 +176,5 @@ for i in range(k):
     # 4번
     refactor_tower()
 
-maxi = 0
-for i in range(n):
-    maxi = max(maxi, max(arr[i]))
-print(maxi)
+
+print(get_max())
