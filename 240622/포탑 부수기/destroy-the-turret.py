@@ -15,22 +15,23 @@ def choose_attacker():
                 ay = j
             # 공격력이 낮은 포탑이 2개 이상이면    
             elif arr[i][j] == damage:
-                if attack_time[i][j] > attack[ax][ay]:  # 공격시간이 더 최근이면
+                if attack_time[i][j] > attack_time[ax][ay]:  # 공격시간이 더 최근이면
                     ax = i
                     ay = j
-                elif attack_time[i][j] == attack[ax][ay]:  # 공격 시간도 동일하면
+                elif attack_time[i][j] == attack_time[ax][ay]:  # 공격 시간도 동일하면
                     if i + j > ax + ay:
                         ax = i
                         ay = j
                     elif i + j == ax + ay:
                         if j > ay:
+                            ax = i
                             ay = j
 
     return ax, ay
 
 
 def choose_target():
-    damage = 0
+    damage = -1
     tx = 0
     ty = 0
 
@@ -52,6 +53,7 @@ def choose_target():
                         ty = j
                     elif i + j == tx + ty:
                         if j < ty:
+                            tx = i
                             ty = j
     return tx, ty
 
