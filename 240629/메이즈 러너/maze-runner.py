@@ -1,5 +1,6 @@
 def move_people():
     global move
+    global position
 
     # 상하좌우
     dx=[-1,1,0,0]
@@ -32,9 +33,12 @@ def move_people():
                         position[idx] = [nx,ny]
                         move+=1 # 이동한 거리 더하기
                         break
+    new_position = []
+    for idx,val in enumerate(position):
+        if idx not in del_position:
+            new_position.append(val)
 
-    for i in del_position:
-        position.pop(i)
+    position=new_position
 
 # 출구와 참가자를 포함하는 가장 작은 정사각형 찾기
 def find_sqr():
