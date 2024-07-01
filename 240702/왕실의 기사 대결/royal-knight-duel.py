@@ -17,7 +17,7 @@ def move(num, d):
         nx,ny = x+dx[d], y+dy[d]
 
         # 다음 이동하는 칸이 범위 밖이면 이동하지 않는다.
-        if not 0<=nx<l and 0<=ny<l:
+        if not (0<=nx<l and 0<=ny<l):
             move_ok = False
             break
 
