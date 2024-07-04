@@ -65,8 +65,8 @@ def move_santa(santa, Rr, Rc):
     dy=[0,1,0,-1]
 
     distance = (santa[1]-Rr)**2 + (santa[2]-Rc)**2
-    next_x = 0
-    next_y = 0
+    next_x = santa[1]
+    next_y = santa[2]
     dir = 0
 
     for i in range(4):
@@ -131,7 +131,7 @@ for idx in range(1, M+1):
     # 루돌프 이동 - 산타 충돌 확인
     if crash_rudolf(Rr, Rc, near_santa_index): # 충돌한다면
         # 산타는 밀려나면서 C점을 얻는다.
-        santa_score[near_santa_index+1] += C
+        santa_score[santas[near_santa_index][0]] += C
 
         # 루돌프와 충돌한 산타는 기절한다.
         santas[near_santa_index][3] = 1 # 기절
