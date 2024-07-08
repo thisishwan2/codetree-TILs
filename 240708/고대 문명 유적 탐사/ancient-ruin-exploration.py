@@ -120,12 +120,12 @@ def find_3_by_3():
                         turn = turn_
                         x = i
                         y = j
-                    else:
+                    elif turn == turn_:
                         # 열과 행이 가장 작은것을 선택
                         if x > i:
                             x = i
                             y = j
-                        else:
+                        elif x==i:
                             if y > j:
                                 y = j
 
