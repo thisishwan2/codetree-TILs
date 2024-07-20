@@ -28,7 +28,7 @@ def is_erase():
                 if (target[i][j] == target[i][j-1] != 0):
                     erase_list.add((i, j))
                     erase_list.add((i, j - 1))
-                if (target[i][j] == target[i][(j+1)%4] != 0):
+                if (target[i][j] == target[i][(j+1)%m] != 0):
                     erase_list.add((i, j))
                     erase_list.add((i, (j + 1) % m))
 
@@ -50,9 +50,9 @@ def sum_target():
 def normalization(avg):
     for i in range(n):
         for j in range(m):
-            if target[i][j] >avg:
+            if target[i][j] != 0 and target[i][j] > avg:
                 target[i][j]-=1
-            elif target[i][j] <avg:
+            elif target[i][j] !=0 and target[i][j] < avg:
                 target[i][j]+=1
 
 def erase(erase_set):
