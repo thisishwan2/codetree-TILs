@@ -12,7 +12,6 @@ d = {1:[-1,0], 2:[1,0], 3:[0,-1], 4:[0,1]}
 
 # 이동하는 함수
 def move():
-    # minus()
     for num in player_info.keys():
         x,y,dir = player_info[num][0],player_info[num][1],player_info[num][2]
         for direction in directions[num][dir]:
@@ -40,6 +39,7 @@ def move():
                     # 자신이 독점한 곳이면 이동
                     if area[nx][ny][0] == num:
                         player_info[num] = [nx, ny, direction]
+                        break
 
 def minus():
     # 기존의 칸들에 대해 계약 턴 수를 -1한다.
