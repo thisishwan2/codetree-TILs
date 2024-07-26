@@ -12,6 +12,7 @@ d = {1:[-1,0], 2:[1,0], 3:[0,-1], 4:[0,1]}
 
 # 이동하는 함수
 def move():
+    # minus()
     for num in player_info.keys():
         x,y,dir = player_info[num][0],player_info[num][1],player_info[num][2]
         for direction in directions[num][dir]:
@@ -31,29 +32,27 @@ def move():
 
         # 이동하지 못했다면,
         if move_flag == False:
-            # 반대방향으로 이동한다.
-            if dir ==1:
-                n_dir = 2
-            elif dir ==2:
-                n_dir = 1
-            elif dir ==3:
-                n_dir =4
-            else:
-                n_dir =3
-            nx = x+d[n_dir][0]
-            ny = y+d[n_dir][1]
-            player_info[num] = [nx, ny, n_dir]
+            for direction in directions[num][dir]:
+                nx = x + d[direction][0]
+                ny = y + d[direction][1]
+                # 범위 안이고,
+                if 0 <= nx < n and 0 <= ny < n:
+                    # 자신이 독점한 곳이면 이동
+                    if area[nx][ny][0] == num:
+                        player_info[num] = [nx, ny, direction]
 
-def contract():
+def minus():
     # 기존의 칸들에 대해 계약 턴 수를 -1한다.
     for i in range(n):
         for j in range(n):
             if area[i][j] != []:
-                if area[i][j][1]-1 == 0: # 남은 계약 수-1이 0이면 그 칸은 계약해제
+                if area[i][j][1] - 1 == 0:  # 남은 계약 수-1이 0이면 그 칸은 계약해제
                     area[i][j] = []
                 else:
-                    area[i][j] = [area[i][j][0], area[i][j][1]-1]
+                    area[i][j] = [area[i][j][0], area[i][j][1] - 1]
 
+def contract():
+    minus()
     # 새로운 칸들에 대해 계약을 수행한다.
     for num in player_info.keys():
         x, y, dir = player_info[num][0], player_info[num][1], player_info[num][2]
@@ -146,3 +145,22 @@ if turn==1000:
     print(-1)
 else:
     print(turn)
+
+'''
+
+4 2 4
+0 0 0 2 
+0 0 1 0 
+0 0 0 0 
+0 0 0 0 
+2 3 
+2 3 4 1 
+3 4 2 1 
+2 3 4 1 
+1 2 3 4 
+1 4 3 2 
+2 3 1 4 
+1 3 4 2 
+1 2 3 4
+
+'''
