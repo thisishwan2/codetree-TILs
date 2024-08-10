@@ -203,7 +203,7 @@ for _ in range(m):
     cnt = 1
     num = board[nx][ny]
     q.append([nx,ny])
-    visited = [[0 for __ in range(n)] for __ in range(4)]
+    visited = [[0 for __ in range(n)] for __ in range(n)]
     visited[nx][ny]=1
     while q:
         x_,y_ = q.popleft()
