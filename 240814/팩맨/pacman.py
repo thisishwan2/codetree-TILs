@@ -143,8 +143,8 @@ for _ in range(t):
     # 몬스터 복제
     for i in egg:
         monster.append(i)
-
-    print(monster)
-    print(dead)
-    print(pr, pc)
+    #
+    # print(monster)
+    # print(dead)
+    # print(pr, pc)
 print(len(monster))
