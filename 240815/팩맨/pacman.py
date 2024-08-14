@@ -99,9 +99,9 @@ for _ in range(t):
             if (nnnpr,nnnpc) in monster_coordi and (nnnpr,nnnpc)!=(npr,npc):
                 can_eat_count += monster_coordi[(nnnpr, nnnpc)]
 
-        if can_eat_count>=eat_cnt:
-            eat_cnt=can_eat_count
-            move_candi.append([first, sec, third, eat_cnt])
+            if can_eat_count>=eat_cnt:
+                eat_cnt=can_eat_count
+                move_candi.append([first, sec, third, eat_cnt])
     move_candi.sort(key = lambda x:(-x[3],x[0],x[1],x[2]))
     move_candidate = move_candi[0]
 
@@ -150,8 +150,5 @@ for _ in range(t):
     # 몬스터 복제
     for i in egg:
         monster.append(i)
-    #
-    # print(monster)
-    # print(dead)
-    # print(pr, pc)
+
 print(len(monster))
