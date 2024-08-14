@@ -63,8 +63,9 @@ for _ in range(t):
                     monster_coordi[(nr,nc)]=1
                 else:
                     monster_coordi[(nr,nc)]+=1
-            else: # 움직이지 않은 경우
-                monster.append([r, c, d+1])
+            else: # 움직이지 않은 경우에는 원래 값을 그대로 넣어준다.
+                d=(d+1)%9
+                monster.append([r, c, d])
                 if monster_coordi.get((r, c)) == None:
                     monster_coordi[(r, c)] = 1
                 else:
