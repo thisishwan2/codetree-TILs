@@ -4,8 +4,8 @@ m,t = map(int, input().split()) # m:몬스터 수, t: 턴수
 pr,pc = map(int, input().split()) # 초기위치
 
 monster = deque()
-dead = [] # 힙으로 둔다.
-
+dead = []
+dead_coordi = []
 dx=[0,-1,-1,0,1,1,1,0,-1]
 dy=[0,0,-1,-1,-1,0,1,1,1]
 
@@ -43,18 +43,18 @@ for _ in range(t):
         r,c,d = monster.popleft()
         nr, nc = r+dx[d], c+dy[d]
         # 다음 위치 좌표에 팩맨이 있거나, 격자를 벗어나거나, 시체가 있다면,
-        if not(1<=nr<=4 and 1<=nc<=4) or ([nr,nc] in dead) or ((nr,nc)==(pr,pc)):
+        if not(1<=nr<=4 and 1<=nc<=4) or ([nr,nc] in dead_coordi) or ((nr,nc)==(pr,pc)):
             flag = False # 이동 가능 여부를 확인
             cnt=0
             # 반시계로 회전한다.
             while cnt<7:
                 d=(d+1)%9
                 if d==0:
-                    d+=1
+                    d=1
                 nr, nc = r + dx[d], c + dy[d]
                 cnt+=1
                 # 이동 조건에 충족한다면
-                if (1 <= nr <= 4 and 1 <= nc <= 4) and ([nr, nc] not in dead) and ((nr, nc) != (pr, pc)):
+                if (1 <= nr <= 4 and 1 <= nc <= 4) and ([nr, nc] not in dead_coordi) and ((nr, nc) != (pr, pc)):
                     flag = True
                     break
             if flag == True:
@@ -64,7 +64,7 @@ for _ in range(t):
                 else:
                     monster_coordi[(nr,nc)]+=1
         # 조건 충족시 이동
-        elif (1 <= nr <= 4 and 1 <= nc <= 4) and ([nr, nc] not in dead) and ((nr, nc) != (pr, pc)):
+        elif (1 <= nr <= 4 and 1 <= nc <= 4) and ([nr, nc] not in dead_coordi) and ((nr, nc) != (pr, pc)):
             # 이동한다.
             monster.append([nr,nc,d])
             if monster_coordi.get((nr, nc)) == None:
@@ -72,7 +72,8 @@ for _ in range(t):
             else:
                 monster_coordi[(nr, nc)] += 1
 
-    move_candidate=""
+    # 팩맨이 먹을게 없는 경우도 고려해야함
+    move_candi=[]
     eat_cnt=0
     # 3. 팩맨 이동(팩맨은 3칸을 이동한다.)
     for first, sec, third in p_move:
@@ -86,14 +87,16 @@ for _ in range(t):
             # 먹을 수 있는 몬스터 수
             if (npr,npc) in monster_coordi:
                 can_eat_count+=monster_coordi[(npr,npc)]
-            if (nnpr,nnpc) in monster_coordi:
+            if (nnpr,nnpc) in monster_coordi :
                 can_eat_count += monster_coordi[(nnpr, nnpc)]
             if (nnnpr,nnnpc) in monster_coordi and (nnnpr,nnnpc)!=(npr,npc):
                 can_eat_count += monster_coordi[(nnnpr, nnnpc)]
 
-        if can_eat_count>eat_cnt:
+        if can_eat_count>=eat_cnt:
             eat_cnt=can_eat_count
-            move_candidate=[first, sec, third]
+            move_candi.append([first, sec, third, eat_cnt])
+    move_candi.sort(key = lambda x:(-x[3],x[0],x[1],x[2]))
+    move_candidate = move_candi[0]
 
     # 이동할 좌표를 구했으면, 이동하고, 먹은 팩맨들은 시체 처리한다.
     first, sec, third = move_candidate[0], move_candidate[1], move_candidate[2]
@@ -108,7 +111,7 @@ for _ in range(t):
     if (nnpr,nnpc) in monster_coordi:
         for i in range(monster_coordi[(nnpr,nnpc)]):
             dead.append([nnpr,nnpc,3])
-    if (nnnpr,nnnpc) in monster_coordi:
+    if (nnnpr,nnnpc) in monster_coordi and (nnnpr,nnnpc)!=(npr,npc):
         for i in range(monster_coordi[(nnnpr,nnnpc)]):
             dead.append([nnnpr,nnnpc,3])
 
@@ -126,14 +129,22 @@ for _ in range(t):
 
     # 4. 시체 소멸
     new_dead = []
+    new_dead_coordi = []
     for i in dead:
         if i[2]-1 == 0:
             continue
         else:
             new_dead.append([i[0],i[1],i[2]-1])
+            new_dead_coordi.append([i[0],i[1]])
+
+    dead = new_dead
+    dead_coordi = new_dead_coordi
 
     # 몬스터 복제
     for i in egg:
         monster.append(i)
 
+    print(monster)
+    print(dead)
+    print(pr, pc)
 print(len(monster))
