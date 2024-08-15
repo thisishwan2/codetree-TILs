@@ -88,7 +88,8 @@ def packman_move():
     # 팩맨 위치 최신화
     r,c = third_x, third_y
 
-    # 시체 될 것들을 리스트에 담고, 몬스터는 지운다.
+    remove_monster_idx =[]
+    # 시체 될 것들을 리스트에 담고
     for idx, val in enumerate(zip(copy.deepcopy(monster_coordinate), copy.deepcopy(monster_direction))):
         coordinate = val[0]
         direction = val[1]
@@ -96,8 +97,19 @@ def packman_move():
             dead_coordinate.append(coordinate)
             dead_leave_cnt.append(3)
 
-            monster_coordinate.remove(coordinate)
-            monster_direction.remove(direction)
+            remove_monster_idx.append(idx)
+
+    # 몬스터는 지운다.
+    new_monster_coordinate = []
+    new_monster_direction = []
+    for idx, val in enumerate(zip(monster_coordinate, monster_direction)):
+        coordinate, direction = val[0], val[1]
+        if idx in remove_monster_idx:
+            continue
+        else:
+            new_monster_coordinate.append(coordinate)
+            new_monster_direction.append(direction)
+    return new_monster_coordinate, new_monster_direction
 
 monster_dir = {1:[-1,0],2:[-1,-1],3:[0,-1],4:[1,-1],5:[1,0],6:[1,1],7:[0,1],8:[-1,1]} # 몬스터 방향
 packman_dir = {1:[-1,0],2:[0,-1],3:[1,0],4:[0,1]} # 팩맨 방향
@@ -131,7 +143,7 @@ for _ in range(t):
     monster_coordinate, monster_direction = monster_move(monster_coordinate, monster_direction)
 
     # 3번 팩맨 이동
-    packman_move()
+    monster_coordinate, monster_direction = packman_move()
 
     # 4번 시체 소멸
     new_dead_coordinate=[]
