@@ -158,8 +158,7 @@ for _ in range(t):
     dead_leave_cnt=new_dead_leave_cnt
 
     # 5번 몬스터 복제
-    for coordinate, direction in zip(egg, egg_direction):
-        monster_coordinate.append(coordinate)
-        monster_direction.append(direction)
+    monster_coordinate += egg
+    monster_direction += egg_direction
 
 print(len(monster_coordinate))
