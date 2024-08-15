@@ -15,42 +15,22 @@ def monster_move(monster_coordinate, monster_direction):
     new_monster_coordinate = []
     new_monster_direction = []
     for coordinate, direction in zip(monster_coordinate, monster_direction):
-        x,y =coordinate[0], coordinate[1]
-        nx, ny = x+monster_dir[direction][0], y+monster_dir[direction][1]
-        original_dir = direction
-        # 움직이려는 칸에 몬스터 시체가 있거나, 팩맨이 있거나, 격자를 벗어난다면,
-        if [nx,ny] in dead_coordinate or (nx,ny) == (r,c) or not(1<=nx<=4 and 1<=ny<=4):
-            # 반시계로 회전하면서 갈 수 있는 곳을 찾는다.
-            move_ok = False
-            cnt=0
-            while cnt<7:
-                cnt+=1
-                if (direction+1) == 9:
-                    direction=1
-                else:
-                    direction+=1
-
-                nx, ny = x + monster_dir[direction][0], y + monster_dir[direction][1]
-                # 이동 가능하다면,
-                if [nx,ny] not in dead_coordinate and (nx,ny) != (r,c) and (1<=nx<=4 and 1<=ny<=4):
-                    move_ok=True
-                    break
-            # 이동 가능한 칸이 있다면,
-            if move_ok:
-                new_monster_coordinate.append([nx,ny])
+        x,y = coordinate
+        for _ in range(8):
+            nx, ny = x + monster_dir[direction][0], y + monster_dir[direction][1]
+            if (1 <= nx <= 4 and 1 <= ny <= 4) and ([nx, ny] not in dead_coordinate) and ((nx, ny) != (r, c)):
+                new_monster_coordinate.append([nx, ny])
                 new_monster_direction.append(direction)
-            # 이동 가능한 칸이 없다면
-            else:
-                new_monster_coordinate.append([x, y])
-                new_monster_direction.append(original_dir)
-        else: # 애초에 이동 가능하다면, 이동한다
-            new_monster_coordinate.append([nx, ny])
+                break
+            direction = (direction % 8) + 1
+        else:
+            new_monster_coordinate.append([x, y])
             new_monster_direction.append(direction)
 
     return new_monster_coordinate, new_monster_direction
 
 def packman_move():
-    global r,c
+    global r,c, monster_direction, monster_coordinate
     max_eat_cnt = -1
     move_idx = 0
     # 팩맨이 이동할 길을 찾는다.
@@ -67,7 +47,6 @@ def packman_move():
             sec_eat = monster_coordinate.count([sec_x, sec_y])
             third_eat = monster_coordinate.count([third_x, third_y])
 
-            total_eat = 0
             # 처음과 3번째가 갖은 좌표면 세번째 좌표의 몬스터는 이미 먹은 것이다.
             if (first_x, first_y)==(third_x, third_y):
                 total_eat = first_eat+sec_eat
@@ -90,32 +69,19 @@ def packman_move():
 
     remove_monster_idx =[]
     # 시체 될 것들을 리스트에 담고
-    for idx, val in enumerate(zip(copy.deepcopy(monster_coordinate), copy.deepcopy(monster_direction))):
-        coordinate = val[0]
-        direction = val[1]
-        if (first_x == coordinate[0] and first_y == coordinate[1]) or (sec_x == coordinate[0] and sec_y == coordinate[1]) or (third_x == coordinate[0] and third_y == coordinate[1]):
+    for idx, (coordinate, direction) in enumerate(zip(copy.deepcopy(monster_coordinate), copy.deepcopy(monster_direction))):
+        if[first_x, first_y] == coordinate or [sec_x, sec_y] == coordinate or [third_x, third_y] == coordinate:
             dead_coordinate.append(coordinate)
             dead_leave_cnt.append(3)
-
             remove_monster_idx.append(idx)
 
-    # 몬스터는 지운다.
-    new_monster_coordinate = []
-    new_monster_direction = []
-    for idx, val in enumerate(zip(monster_coordinate, monster_direction)):
-        coordinate, direction = val[0], val[1]
-        if idx in remove_monster_idx:
-            continue
-        else:
-            new_monster_coordinate.append(coordinate)
-            new_monster_direction.append(direction)
-    return new_monster_coordinate, new_monster_direction
+    monster_coordinate = [m for i, m in enumerate(monster_coordinate) if i not in remove_monster_idx]
+    monster_direction = [d for i, d in enumerate(monster_direction) if i not in remove_monster_idx]
 
 monster_dir = {1:[-1,0],2:[-1,-1],3:[0,-1],4:[1,-1],5:[1,0],6:[1,1],7:[0,1],8:[-1,1]} # 몬스터 방향
 packman_dir = {1:[-1,0],2:[0,-1],3:[1,0],4:[0,1]} # 팩맨 방향
 packman_move_list = []
 packman_available_move([])
-# print(len(packman_move_list), packman_move_list)
 
 m,t = map(int, input().split()) # m: 몬스터 마리수, t: 턴수
 r,c = map(int, input().split()) # r,c: 초기 위치
@@ -143,7 +109,7 @@ for _ in range(t):
     monster_coordinate, monster_direction = monster_move(monster_coordinate, monster_direction)
 
     # 3번 팩맨 이동
-    monster_coordinate, monster_direction = packman_move()
+    packman_move()
 
     # 4번 시체 소멸
     new_dead_coordinate=[]
