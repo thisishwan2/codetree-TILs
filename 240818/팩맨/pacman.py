@@ -123,7 +123,8 @@ for _ in range(t):
     move_packman()
 
     # 몬스터 시체 소멸
-    for key in dead.keys():
+    key_list = dead.keys()
+    for key in key_list:
         if dead[key]-1 == 0:
             del dead[key]
         else:
