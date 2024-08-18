@@ -26,11 +26,14 @@ def move_monster():
         for y in range(1,5):
             for k in range(1,9):
                 if monster_info[x][y][k]!=0:
+                    # 이전 칸의 값
+                    origin = monster_info[x][y][k]
+
                     # 이동하려는 칸을 확인한다.
                     # 이동하려는 칸은 격자 안이며, 팩맨이 없고, 몬스터 시체가 없어야한다.
                     nx, ny = x+monster_dir[k][0], y+monster_dir[k][1]
                     if (1<=nx<=4 and 1<=ny<=4) and dead.get((nx,ny))==None and (nx,ny)!=(r,c):
-                        new_monster_info[nx][ny][k]+=1
+                        new_monster_info[nx][ny][k]+=origin
                     else: # 이동하지 못한다면
                         origin_dir = k
                         # 반시계로 돌리면서 이동 가능한 칸을 찾는다.
@@ -45,8 +48,11 @@ def move_monster():
                                 break
                         # 반시계로 돌면서 이동 가능한 칸을 찾은 경우
                         if move_ok:
-                            new_monster_info[nx][ny][k] += 1
-                        # 이동 가능한 칸이 없는 경우는 아무것도 안하면 되므로 고려하지 않는다.
+                            new_monster_info[nx][ny][k] += origin
+                        # 이동 불가능한 경우, 가만히 있는다.
+                        else:
+                            new_monster_info[x][y][origin_dir] += origin
+
     return new_monster_info
 def move_packman():
     global r,c
@@ -78,16 +84,20 @@ def move_packman():
     # 팩맨이 갈 위치를 찾았으니, 해당 위치로 이동시키고, 시체를 만들어 준다.
     r,c = third_x, third_y
 
+    # 시체를 만든다.
+    # 잡아먹은 좌표만 dead에 추가
+    if sum( monster_info[first_x][first_y])>0:
+        dead[(first_x, first_y)] = 3
+    if sum(monster_info[sec_x][sec_y]) > 0:
+        dead[(sec_x, sec_y)] = 3
+    if sum(monster_info[third_x][third_y]) > 0:
+        dead[(third_x, third_y)] = 3
+
     # 먹는다. => 그 좌표의 몬스터의 개수는 0
     for i in range(1, 9):
-        monster_info[first_x][first_y][i]=0
+        monster_info[first_x][first_y][i] = 0
         monster_info[sec_x][sec_y][i] = 0
         monster_info[third_x][third_y][i] = 0
-
-    # 시체를 만든다.
-    dead[(first_x, first_y)] = 3
-    dead[(sec_x, sec_y)] = 3
-    dead[(third_x, third_y)] = 3
 
 monster_dir = {1:[-1,0],2:[-1,-1],3:[0,-1],4:[1,-1],5:[1,0],6:[1,1],7:[0,1],8:[-1,1]} # 몬스터 방향
 packman_dir = {1:[-1,0],2:[0,-1],3:[1,0],4:[0,1]} # 팩맨 방향
@@ -132,7 +142,7 @@ for _ in range(t):
 
     # 몬스터 복제
     for x,y,k in egg.keys():
-        monster_info[x][y][k] +=1
+        monster_info[x][y][k] += egg.get((x,y,k))
 
 # 몬스터 출력
 answer = 0
