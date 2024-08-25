@@ -261,9 +261,13 @@ def get_point(x,y):
             nx=x+dx[i]
             ny=y+dy[i]
 
-            if 0<=nx<n and 0<=ny<n and visited[nx][ny]==0 and board[nx][ny]!=0 and board[nx][ny]!=3:
-                q.append([nx,ny,cnt+1])
-                visited[nx][ny]=1
+            if 0<=nx<n and 0<=ny<n and visited[nx][ny]==0 and board[nx][ny]!=0:
+                if board[x][y]==3 and board[nx][ny]==1:
+                    continue
+                elif board[nx][ny]!=3:
+                    q.append([nx, ny, cnt + 1])
+                    visited[nx][ny] = 1
+                    
 
 def throw_ball(ball_dir, line):
     global score
