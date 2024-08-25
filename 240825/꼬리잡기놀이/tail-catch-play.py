@@ -207,9 +207,9 @@ def move_recursive(x,y,nextx,nexty,key): # x,y: 현재 nx,ny: 이동할 좌표
             ny=y+dy[i]
 
             if 0<=nx<n and 0<=ny<n:
-                if board[nx][ny]==4:
+                if board[nx][ny]==4 or board[nx][ny]==3:
                     head[key]=[nx,ny]
-                    board[nx][ny]=board[x][y]
+                    # board[nx][ny]=board[x][y]
                     board[x][y]=4
                     continue
 
@@ -261,7 +261,7 @@ def get_point(x,y):
             nx=x+dx[i]
             ny=y+dy[i]
 
-            if 0<=nx<n and 0<=ny<n and visited[nx][ny]==0 and board[nx][ny]!=0:
+            if 0<=nx<n and 0<=ny<n and visited[nx][ny]==0 and board[nx][ny]!=0 and board[nx][ny]!=3:
                 q.append([nx,ny,cnt+1])
                 visited[nx][ny]=1
 
@@ -348,6 +348,15 @@ for round in range(k): # 최대 1000
         x,y = head.get(key)
         move_recursive(x,y,None, None, key)
 
+        # 머리와 꼬리위치를 board에 나타낸다.
+        h = head[key]
+        t = tail[key]
+        board[h[0]][h[1]] = 1
+        board[t[0]][t[1]] = 3
+
+    # print("round:" + str(round+1))
+    # print(*board, sep='\n')
+
     # 각 라운드 마다 공이 던져진다.(n배수마다 방향과 던져지는 라인이 바뀐다.)
     ball_dir = (round//n)%4
     line = round%n
@@ -359,5 +368,8 @@ for round in range(k): # 최대 1000
     # 점수는 머리사람을 시작으로 k번째 사람이면, k제곱만큼 점수 획득
     # 공을 획득한 팀은 머리와 꼬리사람이 바뀐다.
     throw_ball(ball_dir, line)
+    # print("==")
+    # print(*board, sep='\n')
+    # print(score)
 
 print(score)
